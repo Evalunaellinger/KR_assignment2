@@ -22,7 +22,7 @@ if os.path.exists(af_file) == False:
     sys.exit(1)
 
 if given_argument not in arguments:
-    print("ERROR: AF_ARGUMENT is not an argument in AF_FILE."
+    print("ERROR: AF_ARGUMENT is not an argument in AF_FILE.\n" 
           "Give the argument as a digit.")
     sys.exit(1)
 
@@ -80,7 +80,8 @@ while True:
             possible_proponent_attacks.append(attack[1])
 
     if len(possible_proponent_attacks) == 0:
-        'Your argument leaves me with no attacking arguments left, therefore YOU WIN!'
+        print('Your argument leaves me with no attacking arguments left, therefore YOU WIN!')
+        break
 
     proponent_attack = random.choice(possible_proponent_attacks)
 
@@ -104,6 +105,7 @@ while True:
 
     if len(relevant_attacks_opponent) == 0:
         print('My argument leaves you with no attacking arguments left, therefore I WIN!')
+        break
 
     while True:
         chosen_argument_to_attack = input(f'Which argument do you want to attack? You can chose from {proponents_used_arguments}: ')
