@@ -1,6 +1,6 @@
 import json
 import random
-from itertools import combinations
+from itertools import combinations, chain
 
 f = open("example-argumentation-framework.json")
 data = json.load(f)
@@ -45,15 +45,73 @@ def pref(arguments, attacks):
 
 
 def grd(arguments, attacks):
-    pass
+    S = []
+    arguments = list(arguments.keys())
+
+    def step1(S, arguments, attacks):
+        for arg in arguments:
+            attacked = False
+            for atc in attacks:
+                if atc[1] == arg:
+                    attacked = True
+            if not attacked:
+                S.append(arg)
+        return S
+
+    def step2(S, arguments, attacks):
+        for a in S:
+            for atc in attacks:
+                if atc[1] == a:
+                    attacks.remove(atc)
+                    arguments.remove(atc[0])
+            arguments.remove(a)
+        return arguments, attacks
+
+    while True:
+        new_S = step1(S, arguments, attacks)
+        if S == new_S:
+            return S
+        arguments, attacks = step2(new_S, arguments, attacks)
+
+
+"""
+Didn't know that an algorithm was given in the slides but this is a complete search
+"""
+# def grd(arguments, attacks):
+#     grd_set = []
+#     subsets = get_subsets(arguments.keys())
+#     for S in subsets:
+#         if characteristic_operator(S, arguments, attacks) == S:
+#             lfp_possible = True
+#             for S_prime in subsets:
+#                 if characteristic_operator(S_prime, arguments, attacks) == S_prime:
+#                     if not set(S) <= set(S_prime):
+#                         lfp_possible = False
+#                         break
+#             if lfp_possible:
+#                 grd_set.append(S)
+#     return grd_set
 
 
 def comp(arguments, attacks):
-    pass
+    comp_set = []
+    for S in get_subsets(arguments.keys()):
+        if characteristic_operator(S, arguments, attacks) == S:
+            comp_set.append(S)
+    return comp_set
 
 
 def stb(arguments, attacks):
-    pass
+    stb_set = []
+    for S in cf(arguments, attacks):
+        A = arguments
+        A.remove(S)
+        there_exists = True
+        for a in A:
+            if not any(conflicts(b, a, attacks) for b in S):
+                there_exists = False
+        if there_exists:
+            stb_set.append(S)
 
 
 def is_defended(a, S, attacks):
@@ -90,13 +148,10 @@ def have_conflict(a, b, attacks):
             return False
 
 
-# def get_sets(arguments):
-#     arguments = list(arguments.keys())
-#     sets = arguments
-#     for i in range(2, len(sets)+1):
-#         print(list(combinations(arguments, i)))
-#         sets.append(combinations(arguments, i))
-#     return sets
+def get_subsets(in_set):
+    s = list(in_set)
+    return list(chain.from_iterable(combinations(s, r) for r in range(len(s) + 1)))
+
 
 # class Game:
 #
