@@ -44,20 +44,39 @@ print(f'P: {given_argument}: {arguments[given_argument]}" \n')
 
 relevant_attacks_opponent = []
 for attack in attack_relations:
+    # FORWARD
     if given_argument == attack[0]:  # Check which attacks state that the given argument is attacked
         relevant_attacks_opponent.append(attack[1])
-# combined_attacks_list = [item for sublist in relevant_attacks_opponent for item in sublist]
+    # BACKWARD
+    if given_argument == attack[1]:
+        relevant_attacks_opponent.append(attack[0])
 
 opponents_used_arguments = []
 proponents_used_arguments = []
 proponents_used_arguments.append(given_argument)
-
 proponent_argument = given_argument
+
+possible_attacks_opponent = [element for element in relevant_attacks_opponent if element not in opponents_used_arguments]
 
 # GAME LOOP
 while True:
+    # relevant_attacks_opponent_ = list(set(relevant_attacks_opponent))
+
+    print(f'Valid attacks: {relevant_attacks_opponent}')
+    print(f'Already used attacks: {opponents_used_arguments}')
+    print(f'Possible attacks: {possible_attacks_opponent}')
+
+    # Returns true if all relevant attacks have already been used
+    check_arguments_left = all(elem in opponents_used_arguments for elem in relevant_attacks_opponent)
+
+    if check_arguments_left == True:  # GAME RULE 3 and WINNER RULE 4
+        print('The opponent has no choices left, as all relevant attacks have already been used, '
+              'therefore THE PROPONENT WINS!')
+        exit(1)
+
     while True:
-        user_input = input('Select opponents (out) argument: \n')
+        user_input = input('Select opponents (out) argument: ')
+        print('')
 
         if user_input not in relevant_attacks_opponent:
             print('The input that you gave is not an (out) argument for the given argument.'
@@ -71,11 +90,7 @@ while True:
             break
         else: # GAME RULE 3
             print(f'The opponent already used this argument.')
-            user_input = f'Choose from {relevant_attacks_opponent}: '
-
-            if user_input not in opponents_used_arguments:
-                opponents_used_arguments.append(user_input)
-                break
+            user_input = input(f'Choose from {possible_attacks_opponent}: ')
 
     # WINNER RULE 1
     if user_input in proponents_used_arguments:
@@ -110,16 +125,7 @@ while True:
         break
 
     # All possible arguments to attack
-    argument_to_attack = random.choice(proponents_used_arguments)
-
-    for attack in attack_relations:
-        if argument_to_attack == attack[1]:  # Check which attacks state that the given argument is attacked
-            relevant_attacks_opponent.append(attack[0])
-
-    # WINNER RULE 4
-    if len(relevant_attacks_opponent) == 0:
-        print('The opponent has no choices left, therefore THE PROPONENT WINS!')
-        break
+    # argument_to_attack = random.choice(proponents_used_arguments)
 
     while True:
         # GAME RULE 1
@@ -130,6 +136,18 @@ while True:
             proponent_attack = chosen_argument_to_attack
             break
 
+    relevant_attacks_opponent = []
+    for attack in attack_relations:
+        if chosen_argument_to_attack == attack[1]:  # Check which attacks state that the given argument is attacked
+            if attack[0] not in relevant_attacks_opponent:
+                relevant_attacks_opponent.append(attack[0])
+        if chosen_argument_to_attack == attack[0]:
+            if attack[1] not in relevant_attacks_opponent:
+                relevant_attacks_opponent.append(attack[1])
 
+    possible_attacks_opponent = [element for element in relevant_attacks_opponent if element not in opponents_used_arguments]
 
-
+    # WINNER RULE 4
+    if len(relevant_attacks_opponent) == 0:
+        print('The opponent has no choices left, therefore THE PROPONENT WINS!')
+        break
