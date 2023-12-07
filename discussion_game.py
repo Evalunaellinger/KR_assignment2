@@ -37,7 +37,7 @@ print('Note: Give your argument in the form of a digit i.e. 0. \n'
       '1. If the opponent uses an argument previously used by the proponent, then the opponent wins (because he has shown that the proponent contradicts itself). \n'
       '2. If the proponent uses an argument previously used by the opponent, then the opponent wins (for similar reasons as in the previous point). \n'
       '3. If the proponent is unable to make a move, then the opponent wins. \n'
-      '4. If the opponent has no choices left, then the proponent wins. \n \n'
+      '4. If the opponent has no choices left, then the proponent wins. \n \n' 
       'THE GAME BEGINS\n')
 
 print(f'P: {given_argument}: {arguments[given_argument]}" \n')
