@@ -2,20 +2,31 @@ import json
 import sys
 import os
 defended = True
-def is_admissible(argument, attacks):
+def is_admissible(argument, attacks,visited):
+    #dealing with loops (a,b), (b,a)
+    if argument in visited:
+        return True
+    visited.add(argument)
     if not attacks[argument]:
         return True
     else:
         Argument = argument
         for attacker in attacks[argument]:
             print(argument, "is attacked by", attacker)
+            # argument attacking itself
+            if argument == attacker:
+                return False
+
             if not attacks[attacker]:
                 print(Argument, "can't be defended against", attacker)
                 return False
             else:
                 for defender in attacks[attacker]:
                     print(defender, "defends", argument, "against", attacker)
-                    if not is_admissible(defender, attacks):
+                   # if attacks[defender] == attacker:
+                      #  break
+                    if not is_admissible(defender, attacks, visited):
+                        visited.remove(argument)
                         defended = False
                     else: 
                         defended = True
@@ -24,6 +35,7 @@ def is_admissible(argument, attacks):
                     return False
                 else:
                     print(argument, "is admissible because", attacker, "is defended against by ", Defender)
+        visited.remove(argument)
         return True
 
 if __name__ == "__main__":
@@ -56,7 +68,7 @@ if __name__ == "__main__":
             attacks[relation[1]].append(relation[0])
     print(attacks)
 
-    if is_admissible(Argument, attacks):
+    if is_admissible(Argument, attacks,set()):
         print(Argument, "is admissible.")
     else:
         print(Argument, "is not admissible.")
