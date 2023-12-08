@@ -44,7 +44,6 @@ is_dictionary = isinstance(arguments, dict)
 if is_dictionary == False:
     arguments = {key: "" for key in arguments}
 
-# print(f'P: {given_argument}: {arguments[given_argument]}" \n')
 print(f'P: "{given_argument}" is in. \n')
 
 relevant_attacks_opponent = []
@@ -71,7 +70,7 @@ while True:
 
     print(f'Valid attacks: {relevant_attacks_opponent}')
     print(f'Already used attacks: {opponents_used_arguments}')
-    print(f'Possible attacks: {possible_attacks_opponent}')
+    print(f'Possible attacks: {possible_attacks_opponent} \n')
 
     # Returns true if all relevant attacks have already been used
     check_arguments_left = all(elem in opponents_used_arguments for elem in relevant_attacks_opponent)
@@ -114,6 +113,8 @@ while True:
     for attack in attack_relations:
         if user_input == attack[0]: # Check which attacks state that the given argument is attacked
             possible_proponent_attacks.append(attack[1])
+        if user_input == attack[1]:
+            possible_proponent_attacks.append(attack[0])
 
     # WINNER RULE 3
     if len(possible_proponent_attacks) == 0:
@@ -122,6 +123,7 @@ while True:
 
     proponent_attack = random.choice(possible_proponent_attacks)
 
+    # For the print of possible arguments to attack
     if proponent_attack not in proponents_used_arguments:
         proponents_used_arguments.append(proponent_attack)
 
@@ -139,6 +141,7 @@ while True:
     while True:
         # GAME RULE 1
         chosen_argument_to_attack = input(f'Select argument opponent wants to attack: {proponents_used_arguments}: ')
+        print('\n')
         if chosen_argument_to_attack not in proponents_used_arguments:
             print('The given argument is not part of the options.')
         else:
