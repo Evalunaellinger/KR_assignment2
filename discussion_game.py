@@ -23,7 +23,7 @@ if os.path.exists(af_file) == False:
 
 if given_argument not in arguments:
     print("ERROR: AF_ARGUMENT is not an argument in AF_FILE.\n" 
-          "Give the argument as a digit.")
+          "Give the argument as a digit or letter.")
     sys.exit(1)
 
 # START GAME
@@ -40,16 +40,23 @@ print('Note: Give your argument in the form of a digit i.e. 0. \n'
       '4. If the opponent has no choices left, then the proponent wins. \n \n' 
       'THE GAME BEGINS\n')
 
-print(f'P: {given_argument}: {arguments[given_argument]}" \n')
+is_dictionary = isinstance(arguments, dict)
+if is_dictionary == False:
+    arguments = {key: "" for key in arguments}
+
+# print(f'P: {given_argument}: {arguments[given_argument]}" \n')
+print(f'P: "{given_argument}" is in. \n')
 
 relevant_attacks_opponent = []
 for attack in attack_relations:
     # FORWARD
     if given_argument == attack[0]:  # Check which attacks state that the given argument is attacked
-        relevant_attacks_opponent.append(attack[1])
+        if attack[1] not in relevant_attacks_opponent:
+            relevant_attacks_opponent.append(attack[1])
     # BACKWARD
     if given_argument == attack[1]:
-        relevant_attacks_opponent.append(attack[0])
+        if attack[0] not in relevant_attacks_opponent:
+            relevant_attacks_opponent.append(attack[0])
 
 opponents_used_arguments = []
 proponents_used_arguments = []
@@ -97,7 +104,8 @@ while True:
         print('The proponent already used this argument, therefore THE OPPONENT WINS!')
         break
 
-    print(f'O: The proponents argument is "in" because "{user_input}: {arguments[user_input]}" is out.')
+    # print(f'O: The proponents argument is "in" because "{user_input}: {arguments[user_input]}" is out.')
+    print(f'O: The proponents argument is "in" because "{user_input}" is out.')
 
     # CHECK THE USER INPUT
     possible_proponent_attacks = []
@@ -117,7 +125,8 @@ while True:
     if proponent_attack not in proponents_used_arguments:
         proponents_used_arguments.append(proponent_attack)
 
-    print(f'P: The opponents argument is out because "{proponent_attack}: {arguments[proponent_attack]}" is in. \n')
+    # print(f'P: The opponents argument is out because "{proponent_attack}: {arguments[proponent_attack]}" is in. \n')
+    print(f'P: The opponents argument is "out" because "{proponent_attack}" is in. \n')
 
     # WINNER RULE 2
     if proponent_attack in opponents_used_arguments:
