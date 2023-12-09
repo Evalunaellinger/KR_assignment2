@@ -61,7 +61,7 @@ class AF:
 
     def comp(self):
         comp_set = []
-        for S in get_subsets(self.arguments):
+        for S in self.cf():
             S = list(S)
             if characteristic_operator(S, self.arguments, self.attacks) == S:
                 comp_set.append(S)
@@ -134,7 +134,7 @@ def get_subsets(in_set):
     return list(chain.from_iterable(combinations(s, r) for r in range(len(s) + 1)))
 
 
-def is_acceptable(a, F):
+def is_acceptable(a, F, semantic):
     cf = F.cf()
     adm = F.adm()
     pref = F.pref()
@@ -149,22 +149,25 @@ def is_acceptable(a, F):
     print("comp: " + str(comp))
     print("stb: " + str(stb))
 
-    acceptables = F.cf()
-    acceptables.extend(x for x in F.adm() if x not in acceptables)
-    acceptables.extend(x for x in F.pref() if x not in acceptables)
-    acceptables.extend(x for x in F.grd() if x not in acceptables)
-    acceptables.extend(x for x in F.comp() if x not in acceptables)
-    acceptables.extend(x for x in F.stb() if x not in acceptables)
+    # acceptables = F.cf()
+    # acceptables.extend(x for x in F.adm() if x not in acceptables)
+    # acceptables.extend(x for x in F.pref() if x not in acceptables)
+    # acceptables.extend(x for x in F.grd() if x not in acceptables)
+    # acceptables.extend(x for x in F.comp() if x not in acceptables)
+    # acceptables.extend(x for x in F.stb() if x not in acceptables)
+    # print("acceptables: " + str(acceptables))
 
-    print("acceptables: " + str(acceptables))
-    if a in acceptables:
-        return True
+    if semantic in locals():
+        for x in locals()[semantic]:
+            if a[0] in x:
+                return f"Argument {a[0]} is accepted under semantics {semantic}"
+        return f"Argument {a[0]} is not accepted under semantics {semantic}"
     else:
-        return False
+        return "Invalid semantic"
 
 
 F = AF(args, atcs)
-arg = ["a"]
-print(is_acceptable(arg, F))
+arg = ["e"]
+print(is_acceptable(arg, F, "cf"))
 
 
