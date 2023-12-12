@@ -1,17 +1,10 @@
 import json
 from itertools import combinations, chain
 
-f = open("example-argumentation-framework copy.json")
-data = json.load(f)
-f.close()
-
-args = data["Arguments"]
-atcs = data["Attack Relations"]
-
 
 class AF:
     def __init__(self, arguments, attacks):
-        self.arguments = list(arguments.keys())
+        self.arguments = list(arguments)
         self.attacks = attacks
 
     def get_arguments(self):
@@ -166,8 +159,20 @@ def is_acceptable(a, F, semantic):
         return "Invalid semantic"
 
 
+# Three parameters to be changed
+file_name = "example-argumentation-framework copy.json"
+argument = ["e"]
+semantic = "cf"
+
+f = open(file_name)
+data = json.load(f)
+f.close()
+
+args = data["Arguments"]
+atcs = data["Attack Relations"]
+
 F = AF(args, atcs)
 arg = ["e"]
-print(is_acceptable(arg, F, "cf"))
+print(is_acceptable(argument, F, semantic))
 
 
