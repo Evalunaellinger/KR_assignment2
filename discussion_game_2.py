@@ -57,7 +57,7 @@ class AF:
 
     def check_opponent_no_choices(self):
         if len(self.possible_attacks_opponent) == 0:
-            print('The opponent has no choices left, as all relevant attacks have already been used, '
+            print('WINNER RULE 1: The opponent has no choices left, as all relevant attacks have already been used, '
                   'therefore THE PROPONENT WINS!')
             return True
 
@@ -179,14 +179,14 @@ if __name__ == "__main__":
 
     # GAME LOOP
     while True:
-        AF.print_opponent_attack_info()
-        if AF.check_opponent_no_choices(): # WINNER RULE
+        AF.print_opponent_attack_info() # Prints the possible attacks of the opponent
+        if AF.check_opponent_no_choices(): # Proponent wins if the opponent has already used all the possible attacks
             break
-        AF.prompt_argument_opponent()
-        AF.check_opponent_argument_double_use()
-        if AF.winner_rule_1():
+        AF.prompt_argument_opponent() # Prompts the opponent for an attacking argument
+        AF.check_opponent_argument_double_use() # Checks GAME RULE 3: the opponent cannot use an argument twice
+        if AF.winner_rule_1(): # checks WINNER RULE 1
             break
-        AF.print_opponent_attack()
+        AF.print_opponent_attack() # Prints opponent attack
         AF.calculate_possible_proponent_attacks()
         if AF.winner_rule3():
             break
