@@ -1,5 +1,8 @@
 import json
 from itertools import combinations, chain
+import sys
+import os
+import time
 
 
 class AF:
@@ -128,12 +131,43 @@ def get_subsets(in_set):
 
 
 def is_acceptable(a, F, semantic):
+
+    # print(f'TEST {file_name} {argument}')
+    # start_time = time.time()
     cf = F.cf()
+    # end_time = time.time()
+    # elapsed_time = end_time - start_time
+    # print(f"Elapsed time cf: {elapsed_time} seconds")
+
+    # start_time = time.time()
     adm = F.adm()
+    # end_time = time.time()
+    # elapsed_time = end_time - start_time
+    # print(f"Elapsed time adm: {elapsed_time} seconds")
+    #
+    # start_time = time.time()
     pref = F.pref()
+    # end_time = time.time()
+    # elapsed_time = end_time - start_time
+    # print(f"Elapsed time pref: {elapsed_time} seconds")
+
+    # start_time = time.time()
     grd = F.grd()
+    # end_time = time.time()
+    # elapsed_time = end_time - start_time
+    # print(f"Elapsed time grd: {elapsed_time} seconds")
+
+    # start_time = time.time()
     comp = F.comp()
+    # end_time = time.time()
+    # elapsed_time = end_time - start_time
+    # print(f"Elapsed time comp: {elapsed_time} seconds")
+
+    # start_time = time.time()
     stb = F.stb()
+    # end_time = time.time()
+    # elapsed_time = end_time - start_time
+    # print(f"Elapsed time stb: {elapsed_time} seconds")
 
     print("cf: " + str(cf))
     print("adm: " + str(adm))
@@ -158,21 +192,32 @@ def is_acceptable(a, F, semantic):
     else:
         return "Invalid semantic"
 
+if __name__ == "__main__":
+    file_name = sys.argv[1]
+    argument = sys.argv[2]
+    semantic = sys.argv[3]
 
-# Three parameters to be changed
-file_name = "example-argumentation-framework copy.json"
-argument = ["e"]
-semantic = "cf"
+    # Check if 3 arguments are given
+    if len(sys.argv) < 3:
+        print("Usage: python assignment2.py AF_FILE AF_ARGUMENT SEMANTIC \n"
+              "Possible semantics: cf, adm, pref, grf, comp, stb")
+        sys.exit(1)
 
-f = open(file_name)
-data = json.load(f)
-f.close()
+    if os.path.exists(file_name) == False:
+        print("ERROR: AF_FILE cannot be found.")
+        sys.exit(1)
 
-args = data["Arguments"]
-atcs = data["Attack Relations"]
+    argument = [argument]
 
-F = AF(args, atcs)
-arg = ["e"]
-print(is_acceptable(argument, F, semantic))
+    f = open(file_name)
+    data = json.load(f)
+    f.close()
+
+    args = data["Arguments"]
+    atcs = data["Attack Relations"]
+
+    F = AF(args, atcs)
+    arg = argument
+    print(is_acceptable(argument, F, semantic))
 
 
